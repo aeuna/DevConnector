@@ -13,6 +13,7 @@ const User = require('../../models/User');
 // @access Public
 
 router.get('/', auth, async (req, res) => {
+  //auth middleware
   try {
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);

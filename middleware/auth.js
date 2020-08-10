@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 
 module.exports = function (req, res, next) {
+  //인증처리 하는 곳
   //Get token from header
   const token = req.header('x-auth-token');
 
