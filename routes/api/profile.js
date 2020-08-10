@@ -26,8 +26,6 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
-module.exports = router;
-
 // @route POST api/profile
 // @desc  Create or update user profile
 // @access Private
@@ -105,3 +103,40 @@ router.post(
     }
   }
 );
+
+// @route Get api/profile
+// @desc  Get all profiles
+// @access Public
+
+router.get('/', async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate('user', ['name', 'avatar']);
+    res.json(profiles);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route Get api/profile/user/:user_id
+// @desc  Get profile by user_id
+// @access Public
+
+router.get('/user/:user_id', async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      user: req.params.user_id,
+    }).populate('user', ['name', 'avatar']);
+    if (!profile) {
+      return res.status(400).json({ msg: 'Profile not found' });
+    }
+    res.json(profile);
+  } catch (err) {
+    if (err.kind == 'ObjectId') {
+      return res.status(400).json({ msg: 'Profile not found' });
+    }
+    res.status(500).send('Server Error');
+  }
+});
+
+module.exports = router;
