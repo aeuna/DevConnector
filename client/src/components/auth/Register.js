@@ -1,8 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux'; //register에서 redux를 사용하기위해 connect를 가져옴
+import { setAlert } from '../../actions/alert'; //설정한 경고 조치
+import PropTypes from 'prop-types';
+
 // import axios from 'axios';
 
-export const Register = () => {
+const Register = ({ setAlert }) => {
   const [FormData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,7 +23,7 @@ export const Register = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
-      console.log('password not match');
+      setAlert('password not match', 'danger');
     } else {
       console.log('success');
       //   const newUser = {
@@ -101,3 +105,9 @@ export const Register = () => {
     </Fragment>
   );
 };
+
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+};
+
+export default connect(null, { setAlert })(Register); //setAlert를 props로 사용가능
